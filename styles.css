@@ -584,6 +584,10 @@ g.column rect {
   color: rgba(0, 0, 0, 0.8);
 }
 
+#main-part .upload-area {
+  margin-top: 20px;
+}
+
 /* Features column */
 
 .features.column {
