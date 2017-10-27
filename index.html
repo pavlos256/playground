@@ -196,7 +196,8 @@ limitations under the License.
       </div>
       <div class="upload-area">
         <p>Or upload a data file</p>
-        <button class="basic-button" id="data-upload-button" title="Upload data">
+        <input type="file" id="data-upload-input" style="display: none">
+        <button class="basic-button" type="button" id="data-upload-button" title="Upload data">
           Upload
         </button>
       </div>
@@ -402,6 +403,6 @@ limitations under the License.
   </footer>
   <script src="bundle.js"></script>
   <!-- Google analytics -->
-  <!-- <script src="analytics.js"></script> -->
+  <script src="analytics.js"></script>
 </body>
 </html>

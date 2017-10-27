@@ -205,6 +205,65 @@ function makeGUI() {
     parametersChanged = true;
   });
 
+  //
+  // File upload
+  //
+  let fileInput = <HTMLInputElement>document.getElementById("data-upload-input");
+
+  // Redirect the button click to the file input
+  document.getElementById("data-upload-button").addEventListener("click", (ev) => {
+    ev.preventDefault();
+    fileInput.click();
+  });
+
+  // Handle file input (upload)
+  fileInput.addEventListener("change", () => {
+    let files = fileInput.files;
+    if (files.length == 0) {
+      return;
+    }
+
+    let file = files[0];
+    fileInput.value = null;
+    let reader = new FileReader();
+    reader.onload = (function(ev) {
+      // Got data
+      let text = reader.result;
+      let lines = text.split("\n");
+      let data: Example2D[] = [];
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (line.length >= 5) {
+          let parts = line.split(",");
+          if (parts.length >= 3) {
+            let x = parseFloat(parts[0]);
+            let y = parseFloat(parts[1]);
+            let label = parseInt(parts[2]);
+
+            if (!isNaN(x) && !isNaN(y) && !isNaN(label)) {
+              if (label === 0) {
+                label = -1;
+              }
+              data.push({ x, y, label });
+            }
+          }
+        }
+      }
+
+      // Activate new data
+      dataThumbnails.classed("selected", false);
+      state.dataset = null;
+      useFileData(data);
+      parametersChanged = true;
+      reset();
+    });
+    reader.readAsText(file);
+  });
+
+  //
+  //
+  //
+
   let dataThumbnails = d3.selectAll("canvas[data-dataset]");
   dataThumbnails.on("click", function() {
     let newDataset = datasets[this.dataset.dataset];
@@ -1066,6 +1125,17 @@ function generateData(firstTime = false) {
   let generator = state.problem === Problem.CLASSIFICATION ?
       state.dataset : state.regDataset;
   let data = generator(numSamples, state.noise / 100);
+    // Shuffle the data in-place.
+  shuffle(data);
+  // Split into train and test data.
+  let splitIndex = Math.floor(data.length * state.percTrainData / 100);
+  trainData = data.slice(0, splitIndex);
+  testData = data.slice(splitIndex);
+  heatMap.updatePoints(trainData);
+  heatMap.updateTestPoints(state.showTestData ? testData : []);
+}
+
+function useFileData(data: Example2D[]) {
   // Shuffle the data in-place.
   shuffle(data);
   // Split into train and test data.
