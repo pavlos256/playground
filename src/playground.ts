@@ -154,7 +154,7 @@ let selectedNodeId: string = null;
 // Plot the heatmap.
 let xDomain: [number, number] = [-6, 6];
 let heatMap =
-    new HeatMap(300, DENSITY, xDomain, xDomain, d3.select("#heatmap"),
+    new HeatMap(944, DENSITY, xDomain, xDomain, d3.select("#heatmap"),
         {showAxes: true});
 let linkWidthScale = d3.scale.linear()
   .domain([0, 5])
@@ -595,7 +595,7 @@ function drawNetwork(network: nn.Node[][]): void {
   let padding = 3;
   let co = d3.select(".column.output").node() as HTMLDivElement;
   let cf = d3.select(".column.features").node() as HTMLDivElement;
-  let width = co.offsetLeft - cf.offsetLeft;
+  let width = co.parentElement.offsetWidth * 0.9; //co.offsetLeft - cf.offsetLeft;
   svg.attr("width", width);
 
   // Map of all node coordinates.

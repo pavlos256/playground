@@ -384,6 +384,11 @@ header h1 .optional {
   margin-bottom: 50px;
   padding-top: 2px;
   position: relative;
+  overflow: hidden;
+}
+
+#output-part {
+  overflow: auto;
 }
 
 @media (min-height: 700px) {
@@ -457,7 +462,6 @@ g.column rect {
 
 #heatmap {
   position: relative;
-  float: left;
   margin-top: 10px;
 }
 
@@ -747,7 +751,7 @@ g.column rect {
 /* Hidden layers column */
 
 .hidden-layers.column {
-  width: 40%;
+  width: 80%;
 }
 
 #main-part .hidden-layers h4 {
@@ -785,17 +789,12 @@ g.column rect {
   margin-bottom: 5px;
 }
 
-/* Output column */
-
-.output.column {
-  width: 275px;
-}
-
 .metrics {
   position: relative;
   font-weight: 300;
   font-size: 13px;
   height: 60px;
+  width: 944px;
 }
 
 #linechart {
