@@ -77,10 +77,22 @@ export class Node {
     //  let link = this.inputLinks[j];    
     //  X[j] = link.source.output;
     // }
-    if (1 == 1)
-      return 1
-    else 
-      return 0;
+
+    // Stores total input into the node.
+    this.totalInput = this.bias;
+    for (let j = 0; j < this.inputLinks.length; j++) {
+      let link = this.inputLinks[j];
+      this.totalInput += link.weight * link.source.output;
+    }
+
+    if (1 == 1) {
+      this.output = 1;
+    }
+    else {
+      this.output = 0;
+    }
+
+    return this.output;
   }
 }
 
@@ -222,6 +234,9 @@ export function buildNetwork(
     regularization: RegularizationFunction,
     inputIds: string[], initZero?: boolean): Node[][] {
   let numLayers = networkShape.length;
+
+  networkShape[1]++;
+
   let id = 1;
   /** List of layers, with each layer being a list of nodes. */
   let network: Node[][] = [];
@@ -240,6 +255,11 @@ export function buildNetwork(
       }
       let node = new Node(nodeId,
           isOutputLayer ? outputActivation : activation, initZero);
+
+      if (layerIdx === 1 && i === numNodes - 1) {
+        node.isIdeal = true;
+      }
+
       currentLayer.push(node);
       if (layerIdx >= 1) {
         // Add links from nodes in the previous layer to this node.
