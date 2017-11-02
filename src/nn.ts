@@ -15,11 +15,12 @@ limitations under the License.
 
 /**
  * A node in a neural network. Each node has a state
- * (total input, output, and their respectively derivatives) which changes
- * after every forward and back propagation run.
+ * (total input, output, and their respective derivatives) 
+ * which changes after every forward and back propagation run.
  */
 export class Node {
   id: string;
+  isIdeal: boolean = false;
   /** List of input links. */
   inputLinks: Link[] = [];
   bias = 0.1;
@@ -66,6 +67,20 @@ export class Node {
     }
     this.output = this.activation.output(this.totalInput);
     return this.output;
+  }
+
+  /** Finds the output of an Ideal Node for these coordinates and returns it. */
+  updateOutputIdeal(): number {
+    // Looks for a matching data point in an Ideal Node
+    // X: number[] = [];
+    // for (let j = 0; j < this.inputLinks.length; j++) {
+    //  let link = this.inputLinks[j];    
+    //  X[j] = link.source.output;
+    // }
+    if (1 == 1)
+      return 1
+    else 
+      return 0;
   }
 }
 
@@ -266,7 +281,10 @@ export function forwardProp(network: Node[][], inputs: number[]): number {
     // Update all the nodes in this layer.
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
-      node.updateOutput();
+      if (node.isIdeal)
+        node.updateOutputIdeal();
+      else
+        node.updateOutput();
     }
   }
   return network[network.length - 1][0].output;
@@ -376,13 +394,18 @@ export function updateWeights(network: Node[][], learningRate: number,
 }
 
 /** Iterates over every node in the network/ */
-export function forEachNode(network: Node[][], ignoreInputs: boolean,
-    accessor: (node: Node) => any) {
-  for (let layerIdx = ignoreInputs ? 1 : 0;
+export function forEachNode(
+  network: Node[][], 
+  ignoreInputs: boolean,
+  accessor: (node: Node) => any) 
+{
+  for (let layerIdx = ignoreInputs ? 1 : 0; 
       layerIdx < network.length;
-      layerIdx++) {
+      layerIdx++) 
+  {
     let currentLayer = network[layerIdx];
-    for (let i = 0; i < currentLayer.length; i++) {
+    for (let i = 0; i < currentLayer.length; i++) 
+    {
       let node = currentLayer[i];
       accessor(node);
     }

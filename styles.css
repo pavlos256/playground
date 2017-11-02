@@ -62,7 +62,7 @@ body {
 }
 
 .l--page {
-  width: 944px;
+  width: 650px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -370,6 +370,7 @@ header h1 .optional {
   width: 60px;
 }
 
+
 /* Main Part*/
 
 #main-part {
@@ -395,6 +396,10 @@ header h1 .optional {
   #main-part {
     margin-top: 50px;
   }
+}
+
+#main-part .upload-area {
+  margin-top: 20px;
 }
 
 #main-part h4 {
@@ -586,10 +591,6 @@ g.column rect {
 #main-part .basic-button:active {
   background: rgba(158,158,158,.5);
   color: rgba(0, 0, 0, 0.8);
-}
-
-#main-part .upload-area {
-  margin-top: 20px;
 }
 
 /* Features column */
@@ -794,7 +795,7 @@ g.column rect {
   font-weight: 300;
   font-size: 13px;
   height: 60px;
-  width: 944px;
+  width: 650px;
 }
 
 #linechart {

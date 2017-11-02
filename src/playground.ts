@@ -2,7 +2,7 @@
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License at:
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -27,8 +27,10 @@ import {
 } from "./state";
 import {Example2D, shuffle} from "./dataset";
 import {AppendingLineChart} from "./linechart";
+//import {stats} from "/Users/victor/playground/node_modules/stats-lite";
 
 let mainWidth;
+// var stats = require("stats-lite")
 
 // More scrolling
 d3.select(".more button").on("click", function() {
@@ -50,7 +52,7 @@ const RECT_SIZE = 30;
 const BIAS_SIZE = 5;
 const NUM_SAMPLES_CLASSIFY = 500;
 const NUM_SAMPLES_REGRESS = 1200;
-const DENSITY = 100;
+const DENSITY = 200;
 
 enum HoverType {
   BIAS, WEIGHT
@@ -154,7 +156,7 @@ let selectedNodeId: string = null;
 // Plot the heatmap.
 let xDomain: [number, number] = [-6, 6];
 let heatMap =
-    new HeatMap(944, DENSITY, xDomain, xDomain, d3.select("#heatmap"),
+    new HeatMap(650, DENSITY, xDomain, xDomain, d3.select("#heatmap"),
         {showAxes: true});
 let linkWidthScale = d3.scale.linear()
   .domain([0, 5])
@@ -162,7 +164,7 @@ let linkWidthScale = d3.scale.linear()
   .clamp(true);
 let colorScale = d3.scale.linear<string>()
                      .domain([-1, 0, 1])
-                     .range(["#f59322", "#e8eaeb", "#0877bd"])
+                     .range(["#D20202", "#e8eaeb", "#01080d"])
                      .clamp(true);
 let iter = 0;
 let trainData: Example2D[] = [];
@@ -239,8 +241,7 @@ function makeGUI() {
             let x = parseFloat(parts[0]);
             let y = parseFloat(parts[1]);
             let label = parseInt(parts[2]);
-
-            if (!isNaN(x) && !isNaN(y) && !isNaN(label)) {
+           if (!isNaN(x) && !isNaN(y) && !isNaN(label)) {
               if (label === 0) {
                 label = -1;
               }
@@ -248,7 +249,7 @@ function makeGUI() {
             }
           }
         }
-      }
+      }      
 
       // Activate new data
       dataThumbnails.classed("selected", false);
@@ -576,8 +577,9 @@ function drawNode(cx: number, cy: number, nodeId: string, isInput: boolean,
   if (isInput) {
     div.classed(activeOrNotClass, true);
   }
-  let nodeHeatMap = new HeatMap(RECT_SIZE, DENSITY / 10, xDomain,
-      xDomain, div, {noSvg: true});
+  let nodeHeatMap = new HeatMap(RECT_SIZE, DENSITY / 10, 
+    xDomain, xDomain, 
+    div, {noSvg: true});
   div.datum({heatmap: nodeHeatMap, id: nodeId});
 
 }
@@ -838,8 +840,10 @@ function drawLink(
 /**
  * Given a neural network, it asks the network for the output (prediction)
  * of every node in the network using inputs sampled on a square grid.
- * It returns a map where each key is the node ID and the value is a square
- * matrix of the outputs of the network for each input in the grid respectively.
+ *
+ * updateDecisionBoundary acts on global state variable boundary which is a 
+ * map where each key is the node ID and the value is a square matrix
+ * of the outputs of the network for each input in the grid respectively.
  */
 function updateDecisionBoundary(network: nn.Node[][], firstTime: boolean) {
   if (firstTime) {
@@ -1125,7 +1129,8 @@ function generateData(firstTime = false) {
   let generator = state.problem === Problem.CLASSIFICATION ?
       state.dataset : state.regDataset;
   let data = generator(numSamples, state.noise / 100);
-    // Shuffle the data in-place.
+
+   // Shuffle the data in-place.
   shuffle(data);
   // Split into train and test data.
   let splitIndex = Math.floor(data.length * state.percTrainData / 100);
@@ -1134,7 +1139,7 @@ function generateData(firstTime = false) {
   heatMap.updatePoints(trainData);
   heatMap.updateTestPoints(state.showTestData ? testData : []);
 }
-
+  
 function useFileData(data: Example2D[]) {
   // Shuffle the data in-place.
   shuffle(data);
